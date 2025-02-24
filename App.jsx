@@ -19,13 +19,14 @@ import {
   TouchableOpacity,
   Dimensions,
   Animated,
-  ActivityIndicator,
 } from 'react-native';
 import ExhibitDetail from './src/components/ExhibitDetail';
 import BottomTabBar from './src/components/BottomTabBar';
+import {FlatList} from 'react-native-gesture-handler';
 
 const Stack = createStackNavigator();
-const {width} = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
+console.log('height', height);
 
 const bannerData = [
   {
@@ -42,6 +43,24 @@ const bannerData = [
     id: 3,
     color: '#FF5722',
     title: 'Special\nHoliday Events',
+  },
+];
+
+const showData = [
+  {
+    id: 1,
+    time: '2:30 PM',
+    title: 'Dive Feeding @ Shipwreck',
+  },
+  {
+    id: 2,
+    time: '2:30 PM',
+    title: 'Dive Feeding @ Shipwreck',
+  },
+  {
+    id: 3,
+    time: '2:30 PM',
+    title: 'Dive Feeding @ Shipwreck',
   },
 ];
 
@@ -292,7 +311,7 @@ const HomeScreen = ({navigation}) => {
                 <Text style={styles.navText}>Shopping</Text>
               </TouchableOpacity>
             </View>
-            <View style={styles.navRow}>
+            <View style={styles.navRowBottom}>
               <TouchableOpacity style={styles.navItem}>
                 <View style={[styles.navIcon, {backgroundColor: '#f0f0f0'}]}>
                   <Image
@@ -342,14 +361,29 @@ const HomeScreen = ({navigation}) => {
               </TouchableOpacity>
             </View>
 
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {/* <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               <ShowCard time="2:30 PM" title="Dive Feeding @ Shipwreck" />
               <ShowCard time="2:40 PM" title="Say Cheese Shark" />
-            </ScrollView>
+              <ShowCard time="2:40 PM" title="Say Cheese Shark" />
+              <ShowCard time="2:40 PM" title="Say Cheese Shark" />
+              <ShowCard time="2:40 PM" title="Say Cheese Shark" />
+            </ScrollView> */}
+
+            <FlatList
+              data={showData}
+              renderItem={({item}) => (
+                <ShowCard time={item.time} title={item.title} />
+              )}
+              keyExtractor={item => item.id.toString()}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              // style={{paddingHorizontal: 20}}
+              contentContainerStyle={{paddingLeft: 20}}
+            />
           </View>
         </ScrollView>
+        <BottomTabBar />
       </SafeAreaView>
-      <BottomTabBar />
     </View>
   );
 };
@@ -375,6 +409,8 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flex: 1,
+
+    // backgroundColor: 'red',
   },
   header: {
     flexDirection: 'row',
@@ -433,7 +469,19 @@ const styles = StyleSheet.create({
   navRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    // backgroundColor: 'red',
+
     marginBottom: 20,
+  },
+  navRowBottom: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    // alignItems: 'left',
+    // flex: 1,
+    marginBottom: 20,
+    // backgroundColor: 'blue',
+    width: '52%',
+    // paddingLeft: 10,
   },
   navItem: {
     alignItems: 'center',
@@ -498,13 +546,15 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   showsSection: {
-    padding: 20,
+    // padding: 20,
+    // backgroundColor: 'blue',
   },
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 16,
+    paddingHorizontal: 20,
   },
   sectionTitle: {
     fontSize: 18,
@@ -526,6 +576,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#0066cc',
     overflow: 'hidden',
     position: 'relative',
+    borderRadius: 12,
   },
   showImage: {
     width: '100%',
